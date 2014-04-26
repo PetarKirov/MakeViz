@@ -1,0 +1,78 @@
+﻿<Window x:Class="PlotttingApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:local="clr-namespace:PlotttingApp"
+        Title="MainWindow" Height="600" Width="600">
+
+    <Window.DataContext>
+        <local:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <telerik:RadCartesianChart x:Name="chart">
+            <telerik:RadCartesianChart.VerticalAxis>
+                <telerik:LinearAxis  MajorStep="1" LabelInterval="2"/>
+            </telerik:RadCartesianChart.VerticalAxis>
+            <telerik:RadCartesianChart.HorizontalAxis>
+                <telerik:LinearAxis  MajorStep="1" LabelInterval="2"/>
+            </telerik:RadCartesianChart.HorizontalAxis>
+            <telerik:RadCartesianChart.Grid>
+                <telerik:CartesianChartGrid MajorLinesVisibility="XY"/>
+            </telerik:RadCartesianChart.Grid>
+            <telerik:RadCartesianChart.Behaviors>
+                <telerik:ChartCrosshairBehavior />
+                <telerik:ChartPanAndZoomBehavior ZoomMode="Both"/>
+            </telerik:RadCartesianChart.Behaviors>
+
+            <telerik:RadCartesianChart.Series>
+                <telerik:ScatterPointSeries XValueBinding="X" YValueBinding="Y" ItemsSource="{Binding Data}"
+                                            RenderMode="Full">
+                    <telerik:ScatterPointSeries.PointTemplate>
+                        <DataTemplate>
+                            <Ellipse Width="5" Height="5" Fill="Black"/>
+                        </DataTemplate>
+                    </telerik:ScatterPointSeries.PointTemplate>
+                </telerik:ScatterPointSeries>
+            </telerik:RadCartesianChart.Series>
+            
+            <telerik:RadCartesianChart.SeriesProvider>
+                <telerik:ChartSeriesProvider Source="{Binding Lines}">
+                    <telerik:ChartSeriesProvider.SeriesDescriptors>
+                        <telerik:ScatterSeriesDescriptor XValuePath="X" YValuePath="Y" ItemsSourcePath="Data" CollectionIndex="0">
+                            <telerik:ScatterSeriesDescriptor.Style>
+                                <Style TargetType="telerik:ScatterLineSeries">
+                                    <Setter Property="Stroke" Value="Red"/>
+                                </Style>
+                            </telerik:ScatterSeriesDescriptor.Style>
+                        </telerik:ScatterSeriesDescriptor>
+                        <telerik:ScatterSeriesDescriptor XValuePath="X" YValuePath="Y" ItemsSourcePath="Data">
+                            <telerik:ScatterSeriesDescriptor.Style>
+                                <Style TargetType="telerik:ScatterLineSeries">
+                                    <Setter Property="Stroke" Value="Yellow"/>
+                                </Style>
+                            </telerik:ScatterSeriesDescriptor.Style>
+                        </telerik:ScatterSeriesDescriptor>
+                    </telerik:ChartSeriesProvider.SeriesDescriptors>
+                </telerik:ChartSeriesProvider>
+            </telerik:RadCartesianChart.SeriesProvider>
+
+            <telerik:RadCartesianChart.Annotations>
+                <telerik:CartesianGridLineAnnotation Axis="{Binding VerticalAxis, ElementName=chart}"
+                                                     Value="0" Stroke="Black" StrokeThickness="2" ZIndex="-200"/>
+                <telerik:CartesianGridLineAnnotation Axis="{Binding HorizontalAxis, ElementName=chart}"
+                                                     Value="0" Stroke="Black" StrokeThickness="2" ZIndex="-200"/>
+                
+            </telerik:RadCartesianChart.Annotations>
+        </telerik:RadCartesianChart>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock Text="Move z(x) = 3x1 −2x2" />
+            <telerik:RadNumericUpDown Margin="5 0 0 0" Value="{Binding TargetFunctionValue}"/>
+        </StackPanel>
+    </Grid>
+</Window>

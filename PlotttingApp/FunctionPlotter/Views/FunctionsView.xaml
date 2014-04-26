@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="FunctionPlotter.Views.FunctionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:FunctionPlotter.Converters"
+             xmlns:views="clr-namespace:FunctionPlotter.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <converters:EditBrushConverter EditModeBrush="Yellow" NonEditModeBrush="White"
+                                       x:Key="EditBrushConverter"/>
+        
+        <DataTemplate x:Key="functionListItemTemplate">
+            <Border BorderBrush="Black" BorderThickness="1" 
+                    HorizontalAlignment="Stretch" Margin="0 2 0 2"
+                    Background="{Binding IsBeingEdited, Converter={StaticResource EditBrushConverter}}">
+                <Grid Margin="2 0 0 0" Background="Transparent">
+                    <TextBlock Text="{Binding Function.FunctionString}" Background="Transparent"
+                               VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <Button Content="Edit" Margin="5 0 0 0" BorderThickness="1 0 0 0" 
+                            VerticalAlignment="Center" HorizontalAlignment="Right" 
+                            Click="EditFunctionButton_Click"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <StackPanel>
+        <TextBlock Text="Funcitons:" FontSize="18" Margin="10"/>
+        
+        <ItemsControl ItemsSource="{Binding FunctionVMs}" 
+                      ItemTemplate="{StaticResource functionListItemTemplate}"/>
+
+        <views:FunctionPanelControl x:Name="functionPanel"/>
+    </StackPanel>
+</UserControl>
